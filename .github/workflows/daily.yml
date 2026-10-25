@@ -1,0 +1,31 @@
+# Runs the whole pipeline every day: find clips -> pick the best -> email it.
+name: Daily goal email
+
+on:
+  schedule:
+    - cron: "0 12 * * *"  # every day at 12:00 UTC (8am New York, 1pm London)
+  workflow_dispatch:  # adds a "Run workflow" button for testing
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    env:
+      YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: python pick_clip.py
+
+      # Only drafts until you create a repository variable SEND_EMAILS = true
+      # (Settings > Secrets and variables > Actions > Variables).
+      - name: Email (draft only)
+        if: vars.SEND_EMAILS != 'true'
+        run: python send_email.py
+      - name: Email (send to subscribers)
+        if: vars.SEND_EMAILS == 'true'
+        run: python send_email.py --send

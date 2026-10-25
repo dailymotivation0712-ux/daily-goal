@@ -1,0 +1,8 @@
+# Secret keys - never upload
+.env
+
+# Output of each daily run
+todays_pick.json
+todays_picks.json
+
+__pycache__/
