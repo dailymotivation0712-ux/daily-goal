@@ -34,6 +34,7 @@ jobs:
 
       # The website reads docs/today.json (today's goal) and docs/archive.json (past goals).
       - name: Publish today's pick to the website
+        if: ${{ !cancelled() }}  # still runs if an email step failed, so the site stays fresh
         run: |
           python publish_site.py
           git config user.name "github-actions[bot]"
