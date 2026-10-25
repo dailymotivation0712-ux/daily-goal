@@ -8,6 +8,7 @@
   --muted: #a3b8ad;        /* secondary text */
   --lime: #d4ff3a;         /* accent: the ball in the top corner */
   --lime-ink: #10200a;     /* text on lime */
+  --field: #182a21;        /* email box background (solid so autofill can match it) */
   --radius: 18px;
   --display: "Anton", Impact, "Arial Narrow", sans-serif;
   --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -223,7 +224,7 @@ a {
   max-width: 500px;
   margin: 0 auto;
   padding: 0.4rem;
-  background: rgba(244, 247, 242, 0.06);
+  background: var(--field);
   border: 1px solid var(--line);
   border-radius: 999px;
   scroll-margin-top: 8rem;
@@ -234,9 +235,26 @@ a {
   min-width: 0;
   padding: 0.85rem 1.2rem;
   border: none;
+  border-radius: 999px;
   background: transparent;
   color: var(--chalk);
   font: inherit;
+}
+
+/* Browsers paint autofilled fields light blue/white and ignore `background`.
+   A huge inset shadow covers that, and text-fill-color keeps the text light. */
+.signup input:-webkit-autofill,
+.signup input:-webkit-autofill:hover,
+.signup input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--chalk);
+  caret-color: var(--chalk);
+  box-shadow: 0 0 0 1000px var(--field) inset;
+  transition: background-color 9999s ease-out 0s;
+}
+
+.signup input:autofill {
+  box-shadow: 0 0 0 1000px var(--field) inset;
+  -webkit-text-fill-color: var(--chalk);
 }
 
 .signup input::placeholder {
