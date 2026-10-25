@@ -9,6 +9,8 @@ on:
 jobs:
   send:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # lets the last step save today's pick for the website
     env:
       YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -29,3 +31,12 @@ jobs:
       - name: Email (send to subscribers)
         if: vars.SEND_EMAILS == 'true'
         run: python send_email.py --send
+
+      # The website reads docs/today.json (today's goal) and docs/archive.json (past goals).
+      - name: Publish today's pick to the website
+        run: |
+          python publish_site.py
+          git config user.name "github-actions[bot]"
+          git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
+          git add docs/today.json docs/archive.json
+          git diff --cached --quiet || (git commit -m "Today's goal" && git push)

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Past goals · Top Bins</title>
+  <meta name="description" content="Every Goal of the Day from the Top Bins newsletter.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="logo" href="index.html" aria-label="Top Bins home">
+      <svg class="logo-mark" viewBox="0 0 40 28" aria-hidden="true">
+        <path d="M2 27V2h36v25" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M8 2v25M14 2v25M20 2v25M26 2v25M32 2v25M2 8h36M2 14h36M2 20h36" stroke="currentColor" stroke-width=".8" opacity=".35"/>
+        <circle cx="32" cy="8" r="4.5" class="logo-ball"/>
+      </svg>
+      <span>Top Bins</span>
+    </a>
+    <nav class="header-nav">
+      <a class="nav-link" href="archive.html" aria-current="page">Past goals</a>
+      <a class="header-cta" href="index.html#subscribe">Subscribe</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <p class="eyebrow">The archive</p>
+      <h1>Past goals</h1>
+      <p class="lede">Every Goal of the Day we've sent, newest first. Tap any goal to watch it on YouTube.</p>
+    </section>
+
+    <section class="past past-full" aria-label="All past goals">
+      <div class="goal-grid" id="archive-grid"></div>
+      <p class="archive-empty" id="archive-empty" hidden>No goals yet. The first one arrives tomorrow morning.</p>
+    </section>
+
+    <section class="cta-band">
+      <h2>Get tomorrow's goal<br>in your inbox.</h2>
+      <a class="button" href="index.html#subscribe">Subscribe free</a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© <span id="year"></span> Top Bins · All videos play from YouTube and belong to their creators.</p>
+  </footer>
+
+  <script src="goals.js"></script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+    loadArchive().then((archive) => {
+      if (archive.length === 0) {
+        document.getElementById("archive-empty").hidden = false;
+        return;
+      }
+      document.getElementById("archive-grid").append(...archive.map(goalCard));
+    });
+  </script>
+</body>
+</html>

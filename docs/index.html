@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Top Bins · The goal of the day, every morning</title>
+  <meta name="description" content="One soccer goal a day, picked from the last 24 hours and sent to your inbox. Free.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="logo" href="#top" aria-label="Top Bins home">
+      <!-- A goal frame with the ball tucked into the top corner: "top bins" -->
+      <svg class="logo-mark" viewBox="0 0 40 28" aria-hidden="true">
+        <path d="M2 27V2h36v25" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M8 2v25M14 2v25M20 2v25M26 2v25M32 2v25M2 8h36M2 14h36M2 20h36" stroke="currentColor" stroke-width=".8" opacity=".35"/>
+        <circle cx="32" cy="8" r="4.5" class="logo-ball"/>
+      </svg>
+      <span>Top Bins</span>
+    </a>
+    <nav class="header-nav">
+      <a class="nav-link" href="archive.html">Past goals</a>
+      <a class="header-cta" href="#subscribe">Subscribe</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- Hero + signup -->
+    <section class="hero">
+      <div class="hero-inner">
+        <p class="eyebrow">⚽ Free daily newsletter</p>
+        <h1>One goal.<br><span class="accent">Every morning.</span></h1>
+        <p class="lede">
+          The best goal scored in the last 24 hours, picked and sent to your inbox.
+          Watch it in 30 seconds, then get on with your day.
+        </p>
+
+        <!-- Posts straight to Buttondown, which handles confirmation emails and unsubscribes. -->
+        <form id="subscribe" class="signup"
+              action="https://buttondown.com/api/emails/embed-subscribe/karthikeya"
+              method="post">
+          <label for="email" class="visually-hidden">Email address</label>
+          <input id="email" type="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+          <input type="hidden" name="embed" value="1">
+          <button type="submit">Get the goal</button>
+        </form>
+        <p class="fine-print">Free. One email a day. Unsubscribe in one click.</p>
+      </div>
+    </section>
+
+    <!-- Today's goal, filled in from today.json by the script at the bottom -->
+    <section class="today" aria-labelledby="today-title">
+      <div class="section-head">
+        <p class="eyebrow">Today's pick</p>
+        <h2 id="today-title">Goal of the Day</h2>
+        <p class="today-date" id="today-date"></p>
+      </div>
+
+      <article class="clip-card">
+        <div class="player" id="player">
+          <p class="player-empty">Today's goal is on its way.<br>Check back after 12:00 UTC.</p>
+        </div>
+        <div class="clip-info">
+          <h3 id="clip-title">Every morning, one goal.</h3>
+          <p id="clip-blurb" class="clip-blurb">Subscribe and it lands in your inbox before you've finished your coffee.</p>
+          <p id="clip-meta" class="clip-meta"></p>
+          <div class="clip-actions">
+            <button id="clip-expand" class="button expand-button" type="button" hidden>⤢ Watch full size</button>
+            <a id="clip-link" class="watch-link" href="#" target="_blank" rel="noopener" hidden>Open on YouTube ↗</a>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- Recent goals from archive.json (hidden until there's at least one past day) -->
+    <section class="past" id="past" aria-labelledby="past-title" hidden>
+      <div class="section-head section-head-row">
+        <div>
+          <p class="eyebrow">Missed one?</p>
+          <h2 id="past-title">Past goals</h2>
+        </div>
+        <a class="see-all" href="archive.html">See all past goals →</a>
+      </div>
+      <div class="goal-grid" id="past-grid"></div>
+    </section>
+
+    <!-- How it works -->
+    <section class="how" aria-labelledby="how-title">
+      <div class="section-head">
+        <p class="eyebrow">How it works</p>
+        <h2 id="how-title">From kickoff to your inbox</h2>
+      </div>
+      <ol class="steps">
+        <li class="step">
+          <span class="step-num">01</span>
+          <h3>We scan the day's goals</h3>
+          <p>Every morning we look through the most-watched goal clips posted in the last 24 hours.</p>
+        </li>
+        <li class="step">
+          <span class="step-num">02</span>
+          <h3>We pick the best one</h3>
+          <p>No compilations, no video games, no reaction videos. One real goal, preferably from an official club or league channel.</p>
+        </li>
+        <li class="step">
+          <span class="step-num">03</span>
+          <h3>You watch it in seconds</h3>
+          <p>A short email with the clip and one line on what happened. Tap and it plays on YouTube.</p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- Closing call to action -->
+    <section class="cta-band">
+      <h2>Never miss the goal<br>everyone's talking about.</h2>
+      <a class="button" href="#subscribe">Subscribe free</a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© <span id="year"></span> Top Bins · All videos play from YouTube and belong to their creators.</p>
+  </footer>
+
+  <script src="goals.js"></script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Recent goals: the 6 days before today (archive.json is newest first).
+    loadArchive().then((archive) => {
+      const today = new Date().toISOString().slice(0, 10);
+      const recent = archive.filter((entry) => entry.date !== today).slice(0, 6);
+      if (recent.length === 0) return;
+      document.getElementById("past-grid").append(...recent.map(goalCard));
+      document.getElementById("past").hidden = false;
+    });
+
+    // today.json is updated every morning by the GitHub Actions workflow.
+    fetch("today.json", { cache: "no-store" })
+      .then((response) => (response.ok ? response.json() : Promise.reject()))
+      .then((data) => {
+        const pick = data.picks && data.picks.soccer;
+        if (!pick) return;
+
+        // Plays right here in the card; the Expand button opens the big pop-up player.
+        document.getElementById("player").replaceChildren(playerFrame(pick, false));
+        const expand = document.getElementById("clip-expand");
+        expand.addEventListener("click", () => openPlayer({ ...pick, date: data.date }));
+        expand.hidden = false;
+
+        // textContent (not innerHTML) so a video title can never inject HTML.
+        document.getElementById("today-date").textContent = formatDate(data.date);
+        document.getElementById("clip-title").textContent = pick.title;
+        document.getElementById("clip-blurb").textContent = pick.blurb;
+        document.getElementById("clip-meta").textContent =
+          `${pick.channel} · ${pick.views.toLocaleString()} views`;
+        const link = document.getElementById("clip-link");
+        link.href = pick.link;
+        link.hidden = false;
+      })
+      .catch(() => {}); // no pick yet: keep the placeholder text
+  </script>
+</body>
+</html>
