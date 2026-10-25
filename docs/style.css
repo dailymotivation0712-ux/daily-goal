@@ -1,5 +1,6 @@
 /* ---------- Design tokens ---------- */
 :root {
+  color-scheme: dark;      /* tells Chrome to use dark autofill, scrollbars and controls */
   --night: #06120d;        /* page background: stadium at night */
   --pitch: #0c2419;        /* cards and panels */
   --pitch-light: #133525;
