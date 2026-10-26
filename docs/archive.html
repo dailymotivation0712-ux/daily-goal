@@ -3,29 +3,35 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="dark">
+  <meta name="color-scheme" content="light">
   <title>Past plays · The Daily Shuttle</title>
   <meta name="description" content="Every Play of the Day from The Daily Shuttle badminton newsletter.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏸</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <meta name="theme-color" content="#0c0c0f">
-  <link rel="stylesheet" href="style.css?v=8">
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#ffd23f">
+  <link rel="stylesheet" href="style.css?v=9">
 </head>
 <body>
   <header class="site-header">
     <a class="logo" href="index.html" aria-label="The Daily Shuttle home">
-      <svg class="logo-mark" viewBox="0 0 30 28" aria-hidden="true">
-        <path d="M8 16.4 16.2 2 26.1 11.9 11.6 20Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-        <path d="M9.8 18.2 21.1 6.9M8.9 17.3 18.6 4.4M10.7 19.1 23.6 9.4" stroke="currentColor" stroke-width=".8" opacity=".45"/>
-        <circle cx="7" cy="21" r="4.5" class="logo-cork"/>
+      <svg class="logo-mark" viewBox="-6 -6 52 52" aria-hidden="true">
+        <!-- Detailed shuttlecock in flight: feather skirt, thread rings, cork base -->
+        <g transform="rotate(35 20 20)" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round">
+          <path class="logo-skirt" d="M14 27 L7 5 Q9.6 1.5 12.2 5 Q14.8 1.5 17.4 5 Q20 1.5 22.6 5 Q25.2 1.5 27.8 5 Q30.4 1.5 33 5 L26 27 Z" stroke-width="1.6"/>
+          <path d="M16.4 27 L12.2 5 M18.8 27 L17.4 5 M21.2 27 L22.6 5 M23.6 27 L27.8 5" stroke-width="0.8" opacity="0.45" fill="none"/>
+          <path class="logo-ring" d="M11.45 19 H28.55 M9.23 12 H30.77" stroke-width="1.4" fill="none"/>
+          <rect x="13" y="26.5" width="14" height="3" rx="1.5" fill="currentColor" stroke-width="1"/>
+          <path class="logo-cork" d="M13 29.5 H27 V30.5 A7 6.5 0 0 1 13 30.5 Z" stroke-width="1.6"/>
+          <ellipse cx="17" cy="32.2" rx="1.6" ry="1" fill="#ffffff" stroke="none" opacity="0.75"/>
+        </g>
       </svg>
       <span>The Daily Shuttle</span>
     </a>
     <nav class="header-nav">
       <a class="nav-link" href="archive.html" aria-current="page">Past plays</a>
-      <a class="header-cta" href="index.html#subscribe">Subscribe</a>
+      <a class="header-cta" href="index.html">Subscribe</a>
     </nav>
   </header>
 
@@ -43,7 +49,7 @@
 
     <section class="cta-band">
       <h2>Get tomorrow's play<br>in your inbox.</h2>
-      <a class="button" href="index.html#subscribe">Subscribe free</a>
+      <a class="button" href="index.html">Subscribe free</a>
     </section>
   </main>
 
@@ -52,7 +58,7 @@
     <p>Clips belong to the channels credited and play from YouTube.</p>
   </footer>
 
-  <script src="plays.js?v=8"></script>
+  <script src="plays.js?v=9"></script>
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
     loadArchive().then((archive) => {

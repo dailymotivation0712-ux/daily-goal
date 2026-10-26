@@ -1,20 +1,27 @@
 /* ---------- Design tokens ---------- */
 :root {
-  color-scheme: dark;      /* tells Chrome to use dark autofill, scrollbars and controls */
-  --night: #0c0c0f;        /* page background: charcoal */
-  --panel: #17171c;        /* cards and panels */
-  --line: rgba(255, 255, 255, 0.1);  /* court lines and borders */
-  --chalk: #f5f5f7;        /* main text */
-  --muted: #a1a1aa;        /* secondary text */
-  --accent: #ff4b3e;       /* smash red */
+  color-scheme: light;
+  --ink: #1d1b2e;          /* outlines, text and sticker shadows */
+  --page: #fff8ec;         /* cream page background */
+  --hero: #ffd23f;         /* sunny yellow */
+  --accent: #ff5a36;       /* tomato red */
+  --second: #2ec4b6;       /* teal */
+  --soft1: #ffe1d9;        /* pastel card backgrounds */
+  --soft2: #d8f5f2;
+  --soft3: #fff1c2;
+  --night: var(--page);
+  --panel: #ffffff;
+  --line: var(--ink);
+  --chalk: var(--ink);     /* main text */
+  --muted: #5b5870;        /* secondary text */
   --accent-ink: #ffffff;   /* text on the accent */
-  --accent-soft: rgba(255, 75, 62, 0.12);
-  --accent-edge: rgba(255, 75, 62, 0.45);
-  --gold: #ffc94d;         /* throwback badges */
-  --field: #202027;        /* email box background (solid so autofill can match it) */
+  --accent-soft: rgba(255, 90, 54, 0.12);
+  --accent-edge: rgba(255, 90, 54, 0.45);
+  --gold: var(--hero);
+  --field: #ffffff;        /* email box background (solid so autofill can match it) */
   --radius: 18px;
-  --display: "Barlow Condensed", Impact, "Arial Narrow", sans-serif;  /* used 800 italic */
-  --body: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --display: "Lilita One", "Arial Rounded MT Bold", sans-serif;
+  --body: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
   --max: 1080px;
 }
 
@@ -120,8 +127,8 @@ a {
 }
 
 .logo-mark {
-  width: 34px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
   color: var(--chalk);
 }
@@ -855,3 +862,196 @@ html:has(.player-dialog[open]) {
     animation: none !important;
   }
 }
+
+/* ==========================================================
+   Sunny Court: playful sticker style (outlines, offset shadows)
+   ========================================================== */
+
+body {
+  background:
+    radial-gradient(rgba(29, 27, 46, 0.09) 1.3px, transparent 1.5px) 0 0 / 22px 22px,
+    var(--page);
+  font-weight: 600;
+}
+
+/* Friendly headlines: upright, not shouty */
+h2, .logo, .hero h1, .step-num, .page-hero h1 {
+  font-weight: 400 !important;
+  font-style: normal !important;
+  letter-spacing: 0.01em !important;
+}
+h2, .hero h1, .page-hero h1 { text-transform: none !important; }
+
+/* Header */
+.site-header {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-bottom: 3px solid var(--ink);
+}
+.logo { text-transform: none; font-size: 1.6rem; }
+.logo-mark { color: var(--ink); }
+.logo-cork { fill: var(--accent); }
+.nav-link { color: var(--ink); }
+.header-cta {
+  background: var(--hero);
+  border: 2.5px solid var(--ink);
+  color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.header-cta:hover { color: var(--ink); border-color: var(--ink); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
+
+/* Hero: a big sunny block with floating shuttlecocks */
+.hero {
+  background: var(--hero) !important;
+  border-bottom: 3px solid var(--ink);
+}
+.hero::before {
+  content: "🏸" !important;
+  background: none !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+  width: auto !important;
+  aspect-ratio: auto !important;
+  top: 18% !important;
+  left: 8% !important;
+  transform: rotate(-20deg) !important;
+  font-size: clamp(3rem, 8vw, 6rem);
+  animation: bob 4s ease-in-out infinite;
+}
+.hero::after {
+  content: "🏸";
+  position: absolute;
+  right: 8%;
+  bottom: 14%;
+  font-size: clamp(2.2rem, 6vw, 4.5rem);
+  transform: rotate(25deg);
+  animation: bob 5s ease-in-out infinite reverse;
+  pointer-events: none;
+}
+@keyframes bob {
+  50% { translate: 0 -14px; }
+}
+.hero .eyebrow {
+  display: inline-block;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--hero);
+  transform: rotate(-2deg);
+}
+.hero h1 { color: var(--ink); line-height: 1.02; }
+.hero h1 .accent {
+  display: inline-block;
+  color: var(--accent);
+  transform: rotate(-2deg);
+  text-shadow: 4px 4px 0 var(--ink);
+}
+.lede { color: var(--ink) !important; opacity: 0.85; }
+.fine-print { color: var(--ink); opacity: 0.75; }
+
+/* Chunky signup */
+.signup {
+  background: #fff !important;
+  border: 3px solid var(--ink) !important;
+  box-shadow: 5px 5px 0 var(--ink);
+}
+.signup input[type="email"] { color: var(--ink); font-weight: 700; }
+.signup input::placeholder { color: #8a879c; }
+
+/* All buttons: sticker style */
+.signup button,
+.button {
+  border: 3px solid var(--ink) !important;
+  box-shadow: 3px 3px 0 var(--ink) !important;
+  font-weight: 800;
+}
+.signup button:hover,
+.button:hover {
+  transform: translate(-2px, -2px) rotate(-1deg) !important;
+  box-shadow: 5px 5px 0 var(--ink) !important;
+}
+
+/* Section headings */
+.eyebrow { color: var(--accent); }
+h2 { color: var(--ink); }
+
+/* Cards with thick outlines and offset shadows */
+.clip-card,
+.play-card,
+.step,
+.player-dialog {
+  border: 3px solid var(--ink) !important;
+  border-radius: 22px !important;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.play-card:hover,
+.step:hover {
+  transform: translate(-3px, -3px) rotate(-0.5deg) !important;
+  box-shadow: 9px 9px 0 var(--ink);
+  border-color: var(--ink) !important;
+}
+.clip-info h3, .play-body h3 { color: var(--ink); }
+.clip-blurb { color: var(--ink); }
+
+/* Badges look like stickers */
+.tag,
+.tag-throwback {
+  border: 2px solid var(--ink) !important;
+  background: var(--hero) !important;
+  color: var(--ink) !important;
+  transform: rotate(-3deg);
+}
+.tag-throwback { background: var(--second) !important; }
+
+.play-badge {
+  border: 3px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.play-date { color: var(--accent); }
+.watch-link, .see-all { color: var(--accent); }
+
+/* How it works: pastel cards with round numbers */
+.step:nth-child(1) { background: var(--soft1); }
+.step:nth-child(2) { background: var(--soft2); }
+.step:nth-child(3) { background: var(--soft3); }
+.step-num {
+  display: grid !important;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff !important;
+  font-size: 1.8rem !important;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.step:nth-child(2) .step-num { background: var(--second); }
+.step:nth-child(3) .step-num { background: var(--hero); color: var(--ink) !important; }
+.step p { color: var(--ink); opacity: 0.8; }
+
+/* Closing call to action */
+.cta-band {
+  background: var(--second) !important;
+  border: 3px solid var(--ink);
+  box-shadow: 8px 8px 0 var(--ink);
+  color: var(--ink) !important;
+}
+.cta-band::before { display: none; }
+.cta-band h2 { color: var(--ink); }
+.cta-band .button {
+  background: var(--hero) !important;
+  color: var(--ink) !important;
+}
+
+.site-footer { color: var(--ink); opacity: 0.75; }
+.player-dialog { background: #fff; color: var(--ink); }
+.dialog-close { border: 2px solid var(--ink); color: var(--ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero::before, .hero::after { animation: none; }
+}
+
+/* Detailed shuttlecock logo colours */
+.logo-skirt { fill: #ffffff; }
+.logo-ring { stroke: var(--accent); }
+.logo-cork { fill: var(--accent); }
