@@ -1,11 +1,11 @@
-"""Step 4: update the website - today's goal (docs/today.json) and the
-past-goals archive (docs/archive.json, newest first)."""
+"""Step 4: update the website - today's play (docs/today.json) and the
+past-plays archive (docs/archive.json, newest first)."""
 import json
 import os
 
 TODAY = os.path.join("docs", "today.json")
 ARCHIVE = os.path.join("docs", "archive.json")
-SPORT = "soccer"
+SPORT = "badminton"
 
 
 def main():
@@ -32,10 +32,14 @@ def main():
         "channel": pick["channel"],
         "blurb": pick["blurb"],
         "link": pick["link"],
+        "category": pick["category"],
+        "throwback": pick["throwback"],
+        "published": pick["published"],
+        "vertical": pick["vertical"],
     })
     with open(ARCHIVE, "w", encoding="utf-8") as f:
         json.dump(archive, f, indent=2)
-    print(f"Website updated: {len(archive)} goal(s) in the archive.")
+    print(f"Website updated: {len(archive)} play(s) in the archive.")
 
 
 if __name__ == "__main__":

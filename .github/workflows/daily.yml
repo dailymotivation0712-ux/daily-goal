@@ -1,5 +1,5 @@
-# Runs the whole pipeline every day: find clips -> pick the best -> email it.
-name: Daily goal email
+# Runs the whole pipeline every day: find BWF clips -> pick the best play -> email it.
+name: Daily play email
 
 on:
   schedule:

@@ -1,17 +1,32 @@
 {
   "date": "2026-10-25",
   "picks": {
-    "soccer": {
-      "id": "afcGrxWqiUw",
-      "title": "BIG GABI FINISHES FINE ARSENAL MOVE!",
-      "channel": "Arsenal",
-      "description": "Gabriel Magalhaes aka Big Gabi finishes a fine Arsenal move as he scores in a Premier League match against Everton (2026/27)\n\n#Shorts #Arsenal #PremierLeague #EPL #Football #Soccer\n\nSubscribe to the Official Arsenal YouTube Channel: https://arsn.al/youtube\nFollow us on Facebook: https://arsn.al/face",
-      "views": 451976,
-      "seconds": 15,
-      "url": "https://www.youtube.com/watch?v=afcGrxWqiUw",
-      "blurb": "Gabriel Magalhaes scores for Arsenal in a Premier League match against Everton.",
-      "link": "https://www.youtube.com/watch?v=afcGrxWqiUw",
-      "goal_at": null
+    "badminton": {
+      "id": "pqgD1cLj0fY",
+      "title": "HSBC Play of the Day | C'est magnifique!",
+      "channel": "BWF TV",
+      "description": "C'est magnifique! \n\n#HSBCbadminton #BWFWorldTour #FrenchOpen2026\n\nSubscribe: http://smarturl.it/BWFsubscribe  \n\nDownload the Badminton4U app: https://badminton4u.sport\n\nBWF TV is the official channel of the Badminton World Federation (BWF), where we bring to you live, catch-up and delayed streaming ",
+      "tags": [
+        "#HSBCbadminton",
+        "#BWF",
+        "#badminton",
+        "#BWFWorldTour",
+        "2026",
+        "FENG Yan Zhe",
+        "HUANG Dong Ping",
+        "Thom GICQUEL",
+        "Delphine DELRUE"
+      ],
+      "published": "2026-10-25",
+      "views": 22768,
+      "seconds": 45,
+      "vertical": false,
+      "url": "https://www.youtube.com/watch?v=pqgD1cLj0fY",
+      "category": "Top play",
+      "blurb": "Feng Yan Zhe/Huang Dong Ping vs Thom Gicquel/Delphine Delrue at the 2026 French Open features a stunning rally!",
+      "throwback": false,
+      "link": "https://www.youtube.com/watch?v=pqgD1cLj0fY",
+      "moment_at": null
     }
   }
 }

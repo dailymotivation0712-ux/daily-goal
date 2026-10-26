@@ -2,7 +2,9 @@
 .env
 
 # Output of each daily run
-todays_pick.json
 todays_picks.json
 
 __pycache__/
+
+# Local Claude app settings (preview launcher)
+.claude/

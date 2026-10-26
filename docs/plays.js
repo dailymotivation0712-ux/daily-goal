@@ -1,4 +1,4 @@
-// Shared by index.html and archive.html: goal cards and the pop-up video player.
+// Shared by index.html and archive.html: play cards, badges and the pop-up video player.
 
 function formatDate(isoDate) {
   // Noon avoids the date shifting a day in time zones behind UTC.
@@ -9,10 +9,29 @@ function formatDate(isoDate) {
   });
 }
 
+function playTags(entry) {
+  // Small badges: "Best Smash", plus "Throwback · 2019" for classic clips.
+  const tags = document.createElement("div");
+  tags.className = "tags";
+  if (entry.category) {
+    const tag = document.createElement("span");
+    tag.className = "tag";
+    tag.textContent = entry.category === "Top play" ? "Top play" : `Best ${entry.category}`;
+    tags.append(tag);
+  }
+  if (entry.throwback) {
+    const tag = document.createElement("span");
+    tag.className = "tag tag-throwback";
+    tag.textContent = entry.published ? `↺ Throwback · ${entry.published.slice(0, 4)}` : "↺ Throwback";
+    tags.append(tag);
+  }
+  return tags;
+}
+
 function playerFrame(entry, autoplay) {
   // YouTube's embedded player: the video still plays from YouTube, nothing is re-hosted.
   const src = new URL(`https://www.youtube-nocookie.com/embed/${entry.id}`);
-  const start = new URL(entry.link).searchParams.get("t"); // 10s before a late goal
+  const start = new URL(entry.link).searchParams.get("t"); // 10s before a late moment
   if (start) src.searchParams.set("start", parseInt(start, 10));
   if (autoplay) src.searchParams.set("autoplay", "1");
 
@@ -35,7 +54,7 @@ function openPlayer(entry) {
       <div class="dialog-frame"></div>
       <div class="dialog-bar">
         <div>
-          <p class="goal-date"></p>
+          <p class="play-date"></p>
           <h3 class="dialog-title"></h3>
         </div>
         <button class="dialog-close" type="button" aria-label="Close video">✕</button>
@@ -52,17 +71,18 @@ function openPlayer(entry) {
     document.body.append(playerDialog);
   }
 
-  playerDialog.querySelector(".goal-date").textContent = entry.date ? formatDate(entry.date) : "";
+  playerDialog.classList.toggle("is-vertical", Boolean(entry.vertical)); // Shorts get a tall frame
+  playerDialog.querySelector(".play-date").textContent = entry.date ? formatDate(entry.date) : "";
   playerDialog.querySelector(".dialog-title").textContent = entry.title;
   playerDialog.querySelector(".dialog-frame").replaceChildren(playerFrame(entry, true));
   playerDialog.showModal();
 }
 
-function goalCard(entry) {
+function playCard(entry) {
   // Built with textContent (not innerHTML) so a video title can never inject HTML.
   // It's a real link to YouTube, so Ctrl+click / middle-click still opens a new tab.
   const card = document.createElement("a");
-  card.className = "goal-card";
+  card.className = "play-card";
   card.href = entry.link;
   card.target = "_blank";
   card.rel = "noopener";
@@ -73,9 +93,9 @@ function goalCard(entry) {
   });
 
   const media = document.createElement("div");
-  media.className = "goal-media";
+  media.className = "play-media";
   const thumb = document.createElement("img");
-  thumb.className = "goal-thumb";
+  thumb.className = "play-thumb";
   thumb.src = `https://i.ytimg.com/vi/${entry.id}/hqdefault.jpg`; // served by YouTube
   thumb.alt = "";
   thumb.loading = "lazy";
@@ -86,16 +106,19 @@ function goalCard(entry) {
   media.append(thumb, play);
 
   const body = document.createElement("div");
-  body.className = "goal-body";
+  body.className = "play-body";
   const date = document.createElement("p");
-  date.className = "goal-date";
+  date.className = "play-date";
   date.textContent = formatDate(entry.date);
   const title = document.createElement("h3");
   title.textContent = entry.title;
   const blurb = document.createElement("p");
-  blurb.className = "goal-blurb";
+  blurb.className = "play-blurb";
   blurb.textContent = entry.blurb;
-  body.append(date, title, blurb);
+  const credit = document.createElement("p");
+  credit.className = "play-credit";
+  credit.textContent = `Clip: ${entry.channel}`;
+  body.append(date, playTags(entry), title, blurb, credit);
 
   card.append(media, body);
   return card;

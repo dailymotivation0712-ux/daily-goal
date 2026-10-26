@@ -1,4 +1,4 @@
-"""Step 1: find today's top single-goal clips (short videos) on YouTube."""
+"""Step 1: find short badminton clips on YouTube, from a list of trusted channels."""
 import os
 import re
 from datetime import datetime, timedelta, timezone
@@ -19,7 +19,7 @@ def load_env_file(path=".env"):
 
 
 load_env_file()
-API_KEY =os.environ["YOUTUBE_API_KEY"]  # set this in your terminal first
+API_KEY = os.environ["YOUTUBE_API_KEY"]  # from .env locally, GitHub Secrets in Actions
 SEARCH_URL = "https://www.googleapis.com/youtube/v3/search"
 VIDEOS_URL = "https://www.googleapis.com/youtube/v3/videos"
 MAX_SECONDS = 90  # only keep clips this short or shorter
@@ -32,58 +32,86 @@ def to_seconds(iso_duration):
     return hours * 3600 + minutes * 60 + seconds
 
 
-def find_candidates(query, hours=24, max_results=25):
-    """Search for short videos matching `query` uploaded in the last `hours` hours."""
-    since = datetime.now(timezone.utc) - timedelta(hours=hours)
+def is_vertical(video):
+    """True for portrait videos (YouTube Shorts), judged from the embed size."""
+    player = video.get("player", {})
+    try:
+        return int(player["embedHeight"]) > int(player["embedWidth"])
+    except (KeyError, ValueError):
+        return False
+
+
+def find_candidates(query, channel_id, hours=48, max_seconds=MAX_SECONDS, max_results=25):
+    """Short videos on one channel matching `query`, most-viewed first.
+
+    hours=48 means "uploaded in the last 48 hours"; hours=None means any time
+    (used for throwbacks: the most-viewed clips ever). An empty query means
+    "any video on the channel"."""
     params = {
         "part": "snippet",
-        "q": query,
+        "channelId": channel_id,
         "type": "video",
         "videoDuration": "short",  # YouTube's "under 4 minutes" filter
         "order": "viewCount",
-        "publishedAfter": since.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "maxResults": max_results,
         "key": API_KEY,
     }
+    if query:
+        params["q"] = query
+    if hours is not None:
+        since = datetime.now(timezone.utc) - timedelta(hours=hours)
+        params["publishedAfter"] = since.strftime("%Y-%m-%dT%H:%M:%SZ")
     response = requests.get(SEARCH_URL, params=params, timeout=30)
     response.raise_for_status()
-    items = response.json().get("items", [])
-    ids = [item["id"]["videoId"] for item in items]
+    ids = [item["id"]["videoId"] for item in response.json().get("items", [])]
     if not ids:
         return []
 
-    # Search results don't include views or exact length, so ask separately.
-    stats_params = {
-        "part": "snippet,statistics,contentDetails",
+    # Search results don't include views, length, tags or shape, so ask separately.
+    details = requests.get(VIDEOS_URL, timeout=30, params={
+        "part": "snippet,statistics,contentDetails,player",
         "id": ",".join(ids),
+        "maxWidth": 1000,  # makes YouTube report the embed size, which gives the shape
         "key": API_KEY,
-    }
-    stats = requests.get(VIDEOS_URL, params=stats_params, timeout=30)
-    stats.raise_for_status()
+    })
+    details.raise_for_status()
 
     clips = []
-    for video in stats.json().get("items", []):
+    for video in details.json().get("items", []):
         seconds = to_seconds(video["contentDetails"]["duration"])
-        if seconds > MAX_SECONDS:
-            continue  # skip anything too long to be a single goal
-        clips.append(
-            {
-                "id": video["id"],
-                "title": video["snippet"]["title"],
-                "channel": video["snippet"]["channelTitle"],
-                "description": video["snippet"]["description"][:300],
-                "views": int(video["statistics"].get("viewCount", 0)),
-                "seconds": seconds,
-                "url": f"https://www.youtube.com/watch?v={video['id']}",
-            }
-        )
-    return sorted(clips, key=lambda c: c["views"], reverse=True)
+        if seconds > max_seconds:
+            continue  # too long to be a single play
+        snippet = video["snippet"]
+        clips.append({
+            "id": video["id"],
+            "title": snippet["title"],
+            "channel": snippet["channelTitle"],
+            "description": snippet["description"][:300],
+            # BWF puts player names in the tags; drop internal IDs like "p_65267".
+            "tags": [t for t in snippet.get("tags", []) if not re.match(r"^[a-z]_", t)][:15],
+            "published": snippet["publishedAt"][:10],  # YYYY-MM-DD
+            "views": int(video["statistics"].get("viewCount", 0)),
+            "seconds": seconds,
+            "vertical": is_vertical(video),
+            "url": f"https://www.youtube.com/watch?v={video['id']}",
+        })
+    return clips
+
+
+def find_many(searches, skip_ids=(), **options):
+    """Run several (query, channel_id) searches and merge them, most-viewed first.
+    Duplicates and videos in `skip_ids` (already featured) are left out."""
+    seen = set(skip_ids)
+    merged = []
+    for query, channel_id in searches:
+        for clip in find_candidates(query, channel_id, **options):
+            if clip["id"] not in seen:
+                seen.add(clip["id"])
+                merged.append(clip)
+    return sorted(merged, key=lambda c: c["views"], reverse=True)
 
 
 if __name__ == "__main__":
-    candidates = find_candidates("soccer goal")
-    if not candidates:
-        print("No short clips found. Try hours=48 in find_candidates().")
-    for clip in candidates[:5]:
-        print(f"{clip['views']:>10,} views | {clip['seconds']}s | {clip['title']}")
-        print(f"           {clip['channel']} | {clip['url']}\n")
+    for clip in find_candidates("", "UChh-akEbUM8_6ghGVnJd6cQ")[:5]:  # BWF TV, last 48h
+        shape = "vertical" if clip["vertical"] else "wide"
+        print(f"{clip['views']:>10,} views | {clip['seconds']}s | {shape} | {clip['title']}")
