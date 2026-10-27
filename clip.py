@@ -26,8 +26,12 @@ MAX_SECONDS = 90  # only keep clips this short or shorter
 
 
 def to_seconds(iso_duration):
-    """Turn YouTube's duration format (like 'PT1M5S') into seconds."""
+    """Turn YouTube's duration format (like 'PT1M5S') into seconds.
+
+    Returns None for anything else, such as 'P0D' on livestreams and premieres."""
     match = re.fullmatch(r"PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?", iso_duration)
+    if match is None:
+        return None
     hours, minutes, seconds = (int(x or 0) for x in match.groups())
     return hours * 3600 + minutes * 60 + seconds
 
@@ -79,8 +83,8 @@ def find_candidates(query, channel_id, hours=48, max_seconds=MAX_SECONDS, max_re
     clips = []
     for video in details.json().get("items", []):
         seconds = to_seconds(video["contentDetails"]["duration"])
-        if seconds > max_seconds:
-            continue  # too long to be a single play
+        if seconds is None or seconds > max_seconds:
+            continue  # a livestream, or too long to be a single play
         snippet = video["snippet"]
         clips.append({
             "id": video["id"],
