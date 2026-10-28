@@ -23,13 +23,7 @@ jobs:
       - run: pip install -r requirements.txt
       - run: python pick_clip.py
 
-      # Only drafts until you create a repository variable SEND_EMAILS = true
-      # (Settings > Secrets and variables > Actions > Variables).
-      - name: Email (draft only)
-        if: vars.SEND_EMAILS != 'true'
-        run: python send_email.py
       - name: Email (send to subscribers)
-        if: vars.SEND_EMAILS == 'true'
         run: python send_email.py --send
 
       # The website reads docs/today.json (today's goal) and docs/archive.json (past goals).
