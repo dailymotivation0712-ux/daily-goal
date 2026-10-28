@@ -148,10 +148,10 @@
       .then((response) => (response.ok ? response.json() : null))
       .catch(() => null);
 
-    // Recent plays: the 6 newest in archive.json, leaving out today's pick.
+    // Recent plays: the 3 newest in archive.json, leaving out today's pick.
     Promise.all([todayLoaded, loadArchive()]).then(([data, archive]) => {
       const todayId = data && data.picks && data.picks.badminton ? data.picks.badminton.id : null;
-      const recent = archive.filter((entry) => entry.id !== todayId).slice(0, 6);
+      const recent = archive.filter((entry) => entry.id !== todayId).slice(0, 3);
       if (recent.length === 0) return;
       document.getElementById("past-grid").append(...recent.map(playCard));
       document.getElementById("past").hidden = false;
