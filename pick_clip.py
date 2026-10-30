@@ -42,6 +42,14 @@ MAX_CANDIDATES = 12  # each one sends 3 small images to the model
 
 CATEGORIES = ["Smash", "Defence", "Deception", "Rally", "Net play", "Trick shot", "Top play"]
 
+# Titles that mean several plays or matches, e.g. "Top Smashes of the Week".
+# Checked in code so these never reach the model, which sometimes let them through.
+COMPILATION_TITLE = re.compile(
+    r"\b(top \d+|top (ten|five)|best of|of the (week|month|year|tournament)|compilation|montage"
+    r"|highlights?|recap|reel|smashes|rallies|shots|plays|moments|points|saves|skills|winners)\b",
+    re.IGNORECASE,
+)
+
 SYSTEM_PROMPT = """You pick the Play of the Day for The Daily Shuttle, a badminton newsletter.
 
 You get a numbered list of short YouTube videos from official channels (BWF TV,
@@ -66,10 +74,12 @@ A video only qualifies if ALL of these are true:
    meme text added by the uploader (e.g. "OH MY! 🤯"). Official broadcast
    graphics are fine: the scoreboard, tournament logos and official banners
    such as "Play of the Day presented by HSBC".
-4. It shows a single standout play or rally: a huge smash, an incredible
-   defensive save, a deceptive shot, a jaw-dropping rally, brilliant net play
-   or a trick shot. Reject interviews, promos, draws, training, celebrations
-   only, and highlight reels or compilations covering several rallies.
+4. It shows one single play or rally from one single match: a huge smash, an
+   incredible defensive save, a deceptive shot, a jaw-dropping rally, brilliant
+   net play or a trick shot. Reject interviews, promos, draws, training,
+   celebrations only, and any highlight reel or compilation with several rallies
+   or several matches (e.g. "Top Smashes of the Week"). If the frames show
+   different players or courts, it's a compilation.
 
 Among qualifying videos, prefer BWF TV's own uploads, then the more
 spectacular play, then more views.
@@ -177,7 +187,7 @@ def pick_best(clips, throwback=False):
     # Full court needs the wide TV angle, so vertical (phone-shaped) videos are out.
     candidates = []
     for clip in clips:
-        if clip["vertical"]:
+        if clip["vertical"] or COMPILATION_TITLE.search(clip["title"]):
             continue
         clip["frames"] = frame_urls(clip)
         if clip["frames"]:
