@@ -1,6 +1,28 @@
 {
-  "date": "2026-11-05",
+  "date": "2026-11-06",
   "picks": {
-    "badminton": null
+    "badminton": {
+      "id": "lELNbH4d2_E",
+      "title": "HSBC Play of the Day | When defence becomes the best attack!",
+      "channel": "BWF TV",
+      "description": "When defence becomes the best attack!\n\n#HSBCbadminton #BWFWorldTour #KoreaOpen2026\n\nSubscribe: http://smarturl.it/BWFsubscribe  \n\nDownload the Badminton4U app: https://badminton4u.sport\n\nBWF TV is the official channel of the Badminton World Federation (BWF), where we bring to you live, catch-up and ",
+      "tags": [
+        "#HSBCbadminton",
+        "#BWF",
+        "#badminton",
+        "#BWFWorldTour",
+        "2026"
+      ],
+      "published": "2026-11-05",
+      "views": 10556,
+      "seconds": 52,
+      "vertical": false,
+      "url": "https://www.youtube.com/watch?v=lELNbH4d2_E",
+      "category": "Defence",
+      "blurb": "WANG Tzu Wei vs SARJAH at the Korea Open 2026 showcases incredible defensive skills transforming into an impressive counterattack!",
+      "throwback": false,
+      "link": "https://www.youtube.com/watch?v=lELNbH4d2_E",
+      "moment_at": null
+    }
   }
 }
