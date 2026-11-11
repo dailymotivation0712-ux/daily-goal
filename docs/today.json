@@ -1,36 +1,6 @@
 {
-  "date": "2026-11-10",
+  "date": "2026-11-11",
   "picks": {
-    "badminton": {
-      "id": "s6V1_HlqaZk",
-      "title": "Play Of The Day | Badminton SF2 - Dubai World Superseries Finals 2016",
-      "channel": "BWF TV",
-      "description": "http://smarturl.it/BWFsubscribe\n\nDubai World Superseries Finals 2016 \nWorld Superseries Premier\nBadminton\nSemifinals (Session 2)\nPlay Of The Day \nMatch 1 \u2013 MD | Mads Conrad-Petersen/Mads Pieler Kolding vs Takeshi Kamura/Keigo Sonoda\n\nBadmintonWorld.TV is the official live channel of the Badminton Wo",
-      "tags": [
-        "badminton",
-        "badminton championships",
-        "live",
-        "stream",
-        "2016",
-        "Dubai World Superseries Finals 2016",
-        "World Superseries Premier",
-        "Semifinals",
-        "Play Of The Day",
-        "Mads Conrad-Petersen",
-        "Mads Pieler Kolding",
-        "Keigo Sonoda",
-        "Takeshi Kamura"
-      ],
-      "published": "2016-12-18",
-      "views": 322053,
-      "seconds": 79,
-      "vertical": false,
-      "url": "https://www.youtube.com/watch?v=s6V1_HlqaZk",
-      "category": "Top play",
-      "blurb": "Relive The thrilling men's doubles semifinal between Mads Conrad-Petersen/Mads Pieler Kolding and Takeshi Kamura/Keigo Sonoda at The 2016 Dubai World Superseries Finals.",
-      "throwback": true,
-      "link": "https://www.youtube.com/watch?v=s6V1_HlqaZk",
-      "moment_at": null
-    }
+    "badminton": null
   }
 }
