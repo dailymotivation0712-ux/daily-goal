@@ -1,6 +1,28 @@
 {
-  "date": "2026-11-11",
+  "date": "2026-11-12",
   "picks": {
-    "badminton": null
+    "badminton": {
+      "id": "4629ufA7UMU",
+      "title": "HSBC Play of the Day | Super 66-shot rally!",
+      "channel": "BWF TV",
+      "description": "Super 66-shot rally!\n\n#HSBCbadminton #BWFWorldTour #KumamotoMasters2026\n\nSubscribe: http://smarturl.it/BWFsubscribe  \n\nDownload the Badminton4U app: https://badminton4u.sport\n\nBWF TV is the official channel of the Badminton World Federation (BWF), where we bring to you live, catch-up and delayed str",
+      "tags": [
+        "#HSBCbadminton",
+        "#BWF",
+        "#badminton",
+        "#BWFWorldTour",
+        "2026"
+      ],
+      "published": "2026-11-12",
+      "views": 997,
+      "seconds": 75,
+      "vertical": false,
+      "url": "https://www.youtube.com/watch?v=4629ufA7UMU",
+      "category": "Rally",
+      "blurb": "A thrilling 66-shot rally between Li Yin Jie and Hiramoto in the Kumamoto Masters 2026.",
+      "throwback": false,
+      "link": "https://www.youtube.com/watch?v=4629ufA7UMU",
+      "moment_at": null
+    }
   }
 }
