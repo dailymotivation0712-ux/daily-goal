@@ -1,32 +1,6 @@
 {
-  "date": "2026-11-13",
+  "date": "2026-11-14",
   "picks": {
-    "badminton": {
-      "id": "9sPidVxUAjQ",
-      "title": "HSBC Play of the Day | An outstanding recovery",
-      "channel": "BWF TV",
-      "description": "An outstanding recovery.\n\n#HSBCbadminton #BWFWorldTour #KumamotoMasters2026\n\nSubscribe: http://smarturl.it/BWFsubscribe  \n\nDownload the Badminton4U app: https://badminton4u.sport\n\nBWF TV is the official channel of the Badminton World Federation (BWF), where we bring to you live, catch-up and delayed",
-      "tags": [
-        "#HSBCbadminton",
-        "#BWF",
-        "#badminton",
-        "#BWFWorldTour",
-        "2026",
-        "Hiroki OKAMURA",
-        "Kyohei YAMASHITA",
-        "Daniel LUNDGAARD",
-        "Mads VESTERGAARD"
-      ],
-      "published": "2026-11-13",
-      "views": 444,
-      "seconds": 39,
-      "vertical": false,
-      "url": "https://www.youtube.com/watch?v=9sPidVxUAjQ",
-      "category": "Top play",
-      "blurb": "Daniel Lundgaard/Mads Vestergaard vs Hiroki Okamura/Kyohei Yamashita at the Kumamoto Masters 2026.",
-      "throwback": false,
-      "link": "https://www.youtube.com/watch?v=9sPidVxUAjQ",
-      "moment_at": null
-    }
+    "badminton": null
   }
 }
