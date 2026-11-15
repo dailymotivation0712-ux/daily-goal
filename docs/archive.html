@@ -11,7 +11,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
   <meta name="theme-color" content="#ffd23f">
-  <link rel="stylesheet" href="style.css?v=9">
+  <link rel="stylesheet" href="style.css?v=15">
+  <!-- fx.js animates the page with Motion; skip it if the visitor prefers reduced motion -->
+  <script>
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("fx");
+  </script>
 </head>
 <body>
   <header class="site-header">
@@ -37,19 +41,46 @@
 
   <main>
     <section class="page-hero">
-      <p class="eyebrow">The archive</p>
-      <h1>Past plays</h1>
-      <p class="lede">Every Play of the Day we've picked, newest first. Tap any play to watch it.</p>
+      <img class="page-hero-img" alt="" decoding="async"
+           src="assets/court-above.webp" srcset="assets/court-above-sm.webp 960w, assets/court-above.webp 1920w" sizes="100vw">
+      <div class="page-hero-text" data-reveal>
+        <p class="eyebrow">The archive</p>
+        <h1>Past plays</h1>
+        <p class="lede">Every Play of the Day we've picked, newest first. Tap any play to watch it.</p>
+      </div>
     </section>
 
     <section class="past past-full" aria-label="All past plays">
-      <div class="play-grid" id="archive-grid"></div>
+      <div class="play-grid" id="archive-grid" data-reveal-group></div>
       <p class="archive-empty" id="archive-empty" hidden>No plays yet. The first one arrives tomorrow morning.</p>
     </section>
 
-    <section class="cta-band">
-      <h2>Get tomorrow's play<br>in your inbox.</h2>
-      <a class="button" href="index.html">Subscribe free</a>
+    <!-- Closing signup: the name fills the band in giant letters (signup.js), a signup card sits on top -->
+    <section class="wordmark-cta" aria-labelledby="cta-email-title">
+      <div class="wordmark" data-lines="The Daily|Shuttle" data-done="You're|in!" aria-hidden="true"></div>
+      <div class="wm-card signup-block" data-style="wordmark" data-reveal>
+        <p class="eyebrow">Tomorrow's play</p>
+        <h2 id="cta-email-title">Get tomorrow's play in your inbox.</h2>
+        <form class="signup" action="https://buttondown.com/api/emails/embed-subscribe/karthikeya" method="post" novalidate>
+            <label for="cta-email" class="visually-hidden">Email address</label>
+            <input id="cta-email" type="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+            <input type="hidden" name="embed" value="1">
+            <button type="submit">
+              <span class="btn-label">Get the play</span>
+              <svg class="btn-env" viewBox="0 0 24 24" aria-hidden="true">
+                <rect class="btn-draw" x="3" y="6" width="18" height="13" rx="2.2" pathLength="1"/>
+                <polyline class="btn-draw btn-flap" points="3.4,6.6 12,13 20.6,6.6" pathLength="1"/>
+              </svg>
+              <svg class="btn-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 12.5l4.2 4.2 8.8-9.4" pathLength="1"/></svg>
+            </button>
+          </form>
+          <p class="signup-msg" role="alert"></p>
+          <div class="signup-done" role="status" hidden>
+            <p class="signup-done-title">Check your inbox</p>
+            <p>We sent a confirmation link to <strong class="signup-email"></strong>. Click it and tomorrow's play is yours. Give it a minute, and peek in spam if it hides.</p>
+            <button type="button" class="signup-reset">Wrong address?</button>
+          </div>
+      </div>
     </section>
   </main>
 
@@ -58,7 +89,10 @@
     <p>Clips belong to the channels credited and play from YouTube.</p>
   </footer>
 
-  <script src="plays.js?v=9"></script>
+  <script src="plays.js?v=12"></script>
+  <script src="signup.js?v=12"></script>
+  <script src="https://cdn.jsdelivr.net/npm/motion@14.7.1/dist/motion.js"></script>
+  <script src="fx.js?v=15"></script>
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
     loadArchive().then((archive) => {
@@ -66,7 +100,9 @@
         document.getElementById("archive-empty").hidden = false;
         return;
       }
-      document.getElementById("archive-grid").append(...archive.map(playCard));
+      const grid = document.getElementById("archive-grid");
+      grid.append(...archive.map(playCard));
+      revealIn(grid);
     });
   </script>
 </body>

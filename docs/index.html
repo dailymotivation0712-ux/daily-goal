@@ -11,17 +11,27 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="The Daily Shuttle · Badminton's play of the day">
   <meta property="og:description" content="The best play from BWF tournaments, picked from the last 48 hours and sent to your inbox. Free.">
+  <meta property="og:image" content="https://dailymotivation0712-ux.github.io/daily-goal/assets/og.jpg">
   <meta property="og:url" content="https://dailymotivation0712-ux.github.io/daily-goal/">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏸</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=9">
+  <link rel="stylesheet" href="style.css?v=15">
+  <!-- three.js draws the 3D shuttlecock (shuttle3d.js) -->
+  <script type="importmap">
+    { "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/" } }
+  </script>
+  <!-- fx.js animates the page with Motion; skip it if the visitor prefers reduced motion -->
+  <script>
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("fx");
+  </script>
 </head>
-<body id="top">
+<body id="top" class="home">
   <header class="site-header">
     <a class="logo" href="#top" aria-label="The Daily Shuttle home">
-      <!-- A shuttlecock in flight: cork bottom-left, feathers fanning out behind it -->
       <svg class="logo-mark" viewBox="-6 -6 52 52" aria-hidden="true">
         <!-- Detailed shuttlecock in flight: feather skirt, thread rings, cork base -->
         <g transform="rotate(35 20 20)" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round">
@@ -42,37 +52,124 @@
   </header>
 
   <main>
-    <!-- Hero + signup -->
-    <section class="hero">
-      <div class="hero-inner">
-        <p class="eyebrow">🏸 Free daily badminton newsletter</p>
-        <h1>One play.<br><span class="accent">Every morning.</span></h1>
-        <p class="lede">
-          The best play from BWF tournaments in the last 48 hours: a monster smash,
-          an impossible save, a sneaky bit of deception. Quiet day? You get a famous throwback instead.
-        </p>
-
-        <!-- Posts straight to Buttondown, which handles confirmation emails and unsubscribes. -->
-        <form id="subscribe" class="signup"
-              action="https://buttondown.com/api/emails/embed-subscribe/karthikeya"
-              method="post">
-          <label for="email" class="visually-hidden">Email address</label>
-          <input id="email" type="email" name="email" placeholder="you@example.com" autocomplete="email" required>
-          <input type="hidden" name="embed" value="1">
-          <button type="submit">Get the play</button>
-        </form>
-        <p class="fine-print">Free. One email a day. Unsubscribe in one click.</p>
+    <!-- The stage: hero + scroll story. One layer stays pinned to the screen behind
+         them: the sunny backdrop, the night court that fades in, and the 3D shuttle
+         (shuttle3d.js) that flies from pose to pose as you scroll. -->
+    <div class="stage">
+      <div class="stage-pin" aria-hidden="true">
+        <div class="stage-sky"></div>
+        <div class="stage-court">
+          <img class="court-img court-low" alt="" decoding="async"
+               src="assets/court-night.webp" srcset="assets/court-night-sm.webp 960w, assets/court-night.webp 1920w" sizes="100vw">
+          <img class="court-img court-high" alt="" decoding="async" loading="lazy"
+               src="assets/court-above.webp" srcset="assets/court-above-sm.webp 960w, assets/court-above.webp 1920w" sizes="100vw">
+          <div class="court-haze"></div>
+          <canvas class="court-dust"></canvas>
+          <div class="court-shade"></div>
+        </div>
+        <canvas class="stage-canvas"></canvas>
       </div>
+
+      <section class="hero">
+        <div class="hero-text">
+          <p class="hero-badge"><span class="hero-badge-dot" aria-hidden="true"></span>Free daily badminton newsletter</p>
+          <h1>
+            <span class="line"><span>One play.</span></span>
+            <span class="line line-accent"><span>Every morning.</span></span>
+          </h1>
+          <p class="lede">
+            The best play from BWF tournaments in the last 48 hours: a monster smash,
+            an impossible save, a sneaky bit of deception. Quiet day? You get a famous throwback instead.
+          </p>
+
+          <!-- Posts to Buttondown in the background (signup.js), which handles confirmation emails and unsubscribes. -->
+          <div id="subscribe" class="signup-block" data-style="envelope">
+            <form class="signup" action="https://buttondown.com/api/emails/embed-subscribe/karthikeya" method="post" novalidate>
+              <label for="email" class="visually-hidden">Email address</label>
+              <input id="email" type="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+              <input type="hidden" name="embed" value="1">
+              <button type="submit">
+                <span class="btn-label">Get the play</span>
+                <svg class="btn-env" viewBox="0 0 24 24" aria-hidden="true">
+                  <rect class="btn-draw" x="3" y="6" width="18" height="13" rx="2.2" pathLength="1"/>
+                  <polyline class="btn-draw btn-flap" points="3.4,6.6 12,13 20.6,6.6" pathLength="1"/>
+                </svg>
+                <svg class="btn-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 12.5l4.2 4.2 8.8-9.4" pathLength="1"/></svg>
+              </button>
+            </form>
+            <p class="signup-msg" role="alert"></p>
+            <div class="signup-done" role="status" hidden>
+              <p class="signup-done-title">Check your inbox</p>
+              <p>We sent a confirmation link to <strong class="signup-email"></strong>. Click it and tomorrow's play is yours. Give it a minute, and peek in spam if it hides.</p>
+              <button type="button" class="signup-reset">Wrong address?</button>
+            </div>
+          </div>
+          <p class="fine-print">Free. One email a day. Unsubscribe in one click.</p>
+        </div>
+        <!-- Drag here to spin the 3D shuttle (mouse only) -->
+        <div class="hero-grip" aria-hidden="true"><span class="grip-hint">Drag to spin</span></div>
+        <p class="scroll-cue" aria-hidden="true">Scroll<span></span></p>
+      </section>
+
+      <section class="story" aria-labelledby="how-title">
+        <h2 class="visually-hidden" id="how-title">How it works</h2>
+        <article class="story-step">
+          <div class="story-card">
+            <p class="story-num">01</p>
+            <h3>We scan the BWF tournaments.</h3>
+            <p>Every morning we check official channels (BWF TV, the Olympics and badminton federations) for clips from BWF tournaments in the last 48 hours.</p>
+          </div>
+        </article>
+        <article class="story-step story-step-left">
+          <div class="story-card">
+            <p class="story-num">02</p>
+            <h3>We pick the best play.</h3>
+            <p>One standout moment: the hardest smash, the craziest defence, the sneakiest deception or a rally you won't believe.</p>
+          </div>
+        </article>
+        <article class="story-step">
+          <div class="story-card">
+            <p class="story-num">03</p>
+            <h3>Quiet day? Throwback.</h3>
+            <p>If nothing new is good enough, you get a famous classic from the archives instead. Never the same clip twice.</p>
+          </div>
+        </article>
+      </section>
+    </div>
+
+    <!-- The newsletter in four numbers (they count up when scrolled into view; fx.js) -->
+    <section class="stats" aria-labelledby="stats-title">
+      <div class="stats-head" data-reveal>
+        <p class="eyebrow">By the numbers</p>
+        <h2 id="stats-title">Small email. Serious standards.</h2>
+      </div>
+      <dl class="stat-row" data-reveal-group>
+        <div class="stat"><dd><span data-count="1">1</span></dd><dt>play a day. Never a list of ten.</dt></div>
+        <div class="stat"><dd><span data-count="48">48</span><small>h</small></dd><dt>the window we search for something new.</dt></div>
+        <div class="stat"><dd><span data-count="6">6</span></dd><dt>official channels. No random re-uploads.</dt></div>
+        <div class="stat"><dd><span data-count="0">0</span></dd><dt>repeats. The same clip never runs twice.</dt></div>
+      </dl>
     </section>
+
+    <!-- The kinds of play we pick (decorative; the lede above says the same) -->
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        <span>Monster smashes</span><span>Impossible saves</span><span>Sneaky deception</span><span>Endless rallies</span><span>Tight net play</span><span>Trick shots</span>
+        <span>Monster smashes</span><span>Impossible saves</span><span>Sneaky deception</span><span>Endless rallies</span><span>Tight net play</span><span>Trick shots</span>
+        <span>Monster smashes</span><span>Impossible saves</span><span>Sneaky deception</span><span>Endless rallies</span><span>Tight net play</span><span>Trick shots</span>
+        <span>Monster smashes</span><span>Impossible saves</span><span>Sneaky deception</span><span>Endless rallies</span><span>Tight net play</span><span>Trick shots</span>
+      </div>
+    </div>
 
     <!-- Today's play, filled in from today.json by the script at the bottom -->
     <section class="today" aria-labelledby="today-title">
-      <div class="section-head">
+      <div class="section-head section-head-center" data-reveal>
         <p class="eyebrow">Today's pick</p>
-        <h2 id="today-title">Play of the Day</h2>
+        <h2 id="today-title">Play of the Day.</h2>
         <p class="today-date" id="today-date"></p>
       </div>
 
+      <div class="clip-scene">
       <article class="clip-card" id="clip-card">
         <div class="player" id="player">
           <p class="player-empty">Today's play is on its way.<br>Check back after 12:00 UTC.</p>
@@ -83,54 +180,62 @@
           <p id="clip-blurb" class="clip-blurb">Subscribe and it lands in your inbox before you've finished your coffee.</p>
           <p id="clip-meta" class="clip-meta"></p>
           <div class="clip-actions">
-            <button id="clip-expand" class="button expand-button" type="button" hidden>⤢ Watch full size</button>
-            <a id="clip-link" class="watch-link" href="#" target="_blank" rel="noopener" hidden>Open on YouTube ↗</a>
+            <button id="clip-expand" class="button expand-button" type="button" hidden>Watch full size</button>
+            <a id="clip-link" class="watch-link" href="#" target="_blank" rel="noopener" hidden>Open on YouTube</a>
           </div>
         </div>
       </article>
+      </div>
     </section>
 
     <!-- Recent plays from archive.json (hidden until there's at least one past day) -->
     <section class="past" id="past" aria-labelledby="past-title" hidden>
-      <div class="section-head section-head-row">
+      <div class="section-head section-head-row" data-reveal>
         <div>
           <p class="eyebrow">Missed one?</p>
           <h2 id="past-title">Past plays</h2>
         </div>
-        <a class="see-all" href="archive.html">See all past plays →</a>
+        <a class="see-all" href="archive.html">See all past plays</a>
       </div>
-      <div class="play-grid" id="past-grid"></div>
+      <div class="play-grid" id="past-grid" data-reveal-group></div>
     </section>
 
-    <!-- How it works -->
-    <section class="how" aria-labelledby="how-title">
-      <div class="section-head">
-        <p class="eyebrow">How it works</p>
-        <h2 id="how-title">From the court to your inbox</h2>
+    <!-- A real court, a real shuttle, one line about what we do -->
+    <section class="photo-band">
+      <img class="photo-band-img" alt="A feather shuttlecock resting beside a court line under arena lights" loading="lazy" decoding="async"
+           src="assets/shuttle-macro.webp" srcset="assets/shuttle-macro-sm.webp 960w, assets/shuttle-macro.webp 1920w" sizes="100vw">
+      <div class="photo-band-text">
+        <p class="eyebrow">Why one play</p>
+        <h2 class="word-reveal">Tournaments are full of rallies. You only need the best one.</h2>
       </div>
-      <ol class="steps">
-        <li class="step">
-          <span class="step-num">01</span>
-          <h3>We scan the BWF tournaments</h3>
-          <p>Every morning we check official channels (BWF TV, the Olympics and badminton federations) for clips from BWF tournaments in the last 48 hours.</p>
-        </li>
-        <li class="step">
-          <span class="step-num">02</span>
-          <h3>We pick the best play</h3>
-          <p>One standout moment: the hardest smash, the craziest defence, the sneakiest deception or a rally you won't believe.</p>
-        </li>
-        <li class="step">
-          <span class="step-num">03</span>
-          <h3>Quiet day? Throwback.</h3>
-          <p>If nothing new is good enough, you get a famous classic from the archives instead. Never the same clip twice.</p>
-        </li>
-      </ol>
     </section>
 
-    <!-- Closing call to action -->
-    <section class="cta-band">
-      <h2>Never miss the play<br>everyone's talking about.</h2>
-      <a class="button" href="#top">Subscribe free</a>
+    <!-- Closing signup: the name fills the band in giant letters (signup.js), a signup card sits on top -->
+    <section class="wordmark-cta" aria-labelledby="cta-email-title">
+      <div class="wordmark" data-lines="The Daily|Shuttle" data-done="You're|in!" aria-hidden="true"></div>
+      <div class="wm-card signup-block" data-style="wordmark" data-reveal>
+        <p class="eyebrow">Tomorrow's play</p>
+        <h2 id="cta-email-title">Never miss the play everyone's talking about.</h2>
+        <form class="signup" action="https://buttondown.com/api/emails/embed-subscribe/karthikeya" method="post" novalidate>
+            <label for="cta-email" class="visually-hidden">Email address</label>
+            <input id="cta-email" type="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+            <input type="hidden" name="embed" value="1">
+            <button type="submit">
+              <span class="btn-label">Get the play</span>
+              <svg class="btn-env" viewBox="0 0 24 24" aria-hidden="true">
+                <rect class="btn-draw" x="3" y="6" width="18" height="13" rx="2.2" pathLength="1"/>
+                <polyline class="btn-draw btn-flap" points="3.4,6.6 12,13 20.6,6.6" pathLength="1"/>
+              </svg>
+              <svg class="btn-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 12.5l4.2 4.2 8.8-9.4" pathLength="1"/></svg>
+            </button>
+          </form>
+          <p class="signup-msg" role="alert"></p>
+          <div class="signup-done" role="status" hidden>
+            <p class="signup-done-title">Check your inbox</p>
+            <p>We sent a confirmation link to <strong class="signup-email"></strong>. Click it and tomorrow's play is yours. Give it a minute, and peek in spam if it hides.</p>
+            <button type="button" class="signup-reset">Wrong address?</button>
+          </div>
+      </div>
     </section>
   </main>
 
@@ -139,7 +244,11 @@
     <p>Clips belong to the channels credited and play from YouTube.</p>
   </footer>
 
-  <script src="plays.js?v=9"></script>
+  <script src="plays.js?v=12"></script>
+  <script src="signup.js?v=12"></script>
+  <script src="https://cdn.jsdelivr.net/npm/motion@14.7.1/dist/motion.js"></script>
+  <script src="fx.js?v=15"></script>
+  <script type="module" src="shuttle3d.js?v=16"></script>
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
 
@@ -153,8 +262,10 @@
       const todayId = data && data.picks && data.picks.badminton ? data.picks.badminton.id : null;
       const recent = archive.filter((entry) => entry.id !== todayId).slice(0, 3);
       if (recent.length === 0) return;
-      document.getElementById("past-grid").append(...recent.map(playCard));
+      const grid = document.getElementById("past-grid");
+      grid.append(...recent.map(playCard));
       document.getElementById("past").hidden = false;
+      revealIn(grid);
     });
 
     todayLoaded

@@ -57,12 +57,20 @@ function openPlayer(entry) {
           <p class="play-date"></p>
           <h3 class="dialog-title"></h3>
         </div>
-        <button class="dialog-close" type="button" aria-label="Close video">✕</button>
+        <button class="dialog-close" type="button" aria-label="Close video">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+        </button>
       </div>`;
-    playerDialog.querySelector(".dialog-close").addEventListener("click", () => playerDialog.close());
-    // Clicking the dark area outside the player closes it too.
+    // popOut (fx.js) animates the player away first; it resolves at once without Motion.
+    const closePlayer = () => popOut(playerDialog).then(() => playerDialog.close());
+    playerDialog.querySelector(".dialog-close").addEventListener("click", closePlayer);
+    // Clicking the dark area outside the player closes it too, and so does Esc.
     playerDialog.addEventListener("click", (event) => {
-      if (event.target === playerDialog) playerDialog.close();
+      if (event.target === playerDialog) closePlayer();
+    });
+    playerDialog.addEventListener("cancel", (event) => {
+      event.preventDefault();
+      closePlayer();
     });
     // Removing the iframe on close is what stops the video playing in the background.
     playerDialog.addEventListener("close", () => {
@@ -76,6 +84,9 @@ function openPlayer(entry) {
   playerDialog.querySelector(".dialog-title").textContent = entry.title;
   playerDialog.querySelector(".dialog-frame").replaceChildren(playerFrame(entry, true));
   playerDialog.showModal();
+  // Start on the close button: focus inside the YouTube frame would swallow Esc.
+  playerDialog.querySelector(".dialog-close").focus();
+  popIn(playerDialog);
 }
 
 function playCard(entry) {
@@ -86,6 +97,8 @@ function playCard(entry) {
   card.href = entry.link;
   card.target = "_blank";
   card.rel = "noopener";
+  card.dataset.id = entry.id; // for the hover preview in fx.js
+  card.dataset.start = new URL(entry.link).searchParams.get("t") || "";
   card.addEventListener("click", (event) => {
     if (event.ctrlKey || event.metaKey || event.shiftKey || event.button !== 0) return;
     event.preventDefault();
@@ -102,7 +115,7 @@ function playCard(entry) {
   const play = document.createElement("span");
   play.className = "play-badge";
   play.setAttribute("aria-hidden", "true");
-  play.textContent = "▶";
+  play.innerHTML = '<svg viewBox="0 0 20 20"><path d="M4 2.5v15L17 10z"/></svg>'; // fixed markup, no data
   media.append(thumb, play);
 
   const body = document.createElement("div");
