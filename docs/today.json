@@ -1,6 +1,28 @@
 {
-  "date": "2026-11-19",
+  "date": "2026-11-20",
   "picks": {
-    "badminton": null
+    "badminton": {
+      "id": "R_dxKbfVK4U",
+      "title": "HSBC Play of the Day | A moment of magic!",
+      "channel": "BWF TV",
+      "description": "A moment of magic!\n\n#HSBCbadminton #BWFWorldTour #HongKongOpen2026\n\nSubscribe: http://smarturl.it/BWFsubscribe  \n\nDownload the Badminton4U app: https://badminton4u.sport\n\nBWF TV is the official channel of the Badminton World Federation (BWF), where we bring to you live, catch-up and delayed streamin",
+      "tags": [
+        "#HSBCbadminton",
+        "#BWF",
+        "#badminton",
+        "#BWFWorldTour",
+        "2026"
+      ],
+      "published": "2026-11-19",
+      "views": 11300,
+      "seconds": 32,
+      "vertical": false,
+      "url": "https://www.youtube.com/watch?v=R_dxKbfVK4U",
+      "category": "Top play",
+      "blurb": "Yap R K/A Tai vs Cama/Martin at the Hong Kong Open 2026 delivers a stunning moment of magic!",
+      "throwback": false,
+      "link": "https://www.youtube.com/watch?v=R_dxKbfVK4U",
+      "moment_at": null
+    }
   }
 }
